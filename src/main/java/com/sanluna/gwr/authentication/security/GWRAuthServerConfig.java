@@ -1,6 +1,7 @@
 package com.sanluna.gwr.authentication.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,6 +29,11 @@ public class GWRAuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private JwtAccessTokenConverter accessTokenConverter;
 
+    @Value("${GWR.security.prv}")
+    private String prvKey;
+    @Value("${GWR.security.pub}")
+    private String pubKey;
+
     /**
      * We configure the client details in-memory. Alternatively, we could fetch this information from a database.
      */
@@ -46,6 +52,8 @@ public class GWRAuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        accessTokenConverter.setSigningKey(prvKey);
+        accessTokenConverter.setVerifierKey(pubKey);
         endpoints
                 .authenticationManager(authenticationManager)
                 .userDetailsService(userService)
