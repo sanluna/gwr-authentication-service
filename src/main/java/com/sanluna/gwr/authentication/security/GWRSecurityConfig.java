@@ -32,7 +32,7 @@ public class GWRSecurityConfig extends WebSecurityConfigurerAdapter {
                 UsernamePasswordAuthenticationFilter.class)
                 .cors().and()
                 .authorizeRequests()
-                .antMatchers("/oauth/authorize**")
+                .antMatchers("/oauth**", "/login**", "/status/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

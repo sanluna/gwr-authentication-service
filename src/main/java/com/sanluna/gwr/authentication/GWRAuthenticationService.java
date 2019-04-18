@@ -3,27 +3,17 @@ package com.sanluna.gwr.authentication;
 import com.sanluna.commons.BeansAndConfigurations;
 import com.sanluna.gwr.authentication.security.GWRAuthenticationProvider;
 import com.sanluna.gwr.authentication.service.GWRUserDetailsService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import sanluna.gwr.security.SecurityConfiguration;
-import sanluna.gwr.security.principal.GWRTokenConverter;
 
 @SpringBootApplication
-@EnableResourceServer
 @Import({BeansAndConfigurations.class, SecurityConfiguration.class})
 public class GWRAuthenticationService {
-
-    @Value("${GWR.security.prv}")
-    private String prvKey;
-    @Value("${GWR.security.pub}")
-    private String pubKey;
 
     public static void main(String[] args) {
         SpringApplication.run(GWRAuthenticationService.class, args);
