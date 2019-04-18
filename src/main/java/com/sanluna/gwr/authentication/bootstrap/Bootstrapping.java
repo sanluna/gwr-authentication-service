@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
-@Profile("local")
+
 @Component
 public class Bootstrapping {
 
