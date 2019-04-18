@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gwr-authentication-service
+  labels:
+    app: gwr-authentication-service
+  namespace: gwr-api
+  annotations:
+    moniker.spinnaker.io/stack: authentication
+    moniker.spinnaker.io/detail: service
+spec:
+  selector:
+    matchLabels:
+      app: gwr-authentication-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gwr-authentication-service
+    spec:
+      containers:
+      - name: master
+        image: eu.gcr.io/sanluna-gwr/gwr-authentication-service
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 18000
+        readinessProbe:
+          httpGet:
+            path: /authentication/status/health
+            port: 18000
+            httpHeaders:
+            - name: Content-Type
+              value: application/json
+            - name: Accept
+              value: application/json
+          periodSeconds: 8
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 6
+          initialDelaySeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /authentication/status/health
+            port: 18000
+            httpHeaders:
+            - name: Content-Type
+              value: application/json
+            - name: Accept
+              value: application/json
+          periodSeconds: 4
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 6
+          initialDelaySeconds: 20
+        env:
+        - name: JAVA_OPTS
+          value: -Xms128m -Xmx128m
+        resources:
+          limits:
+            memory: 256Mi
+          requests:
+            cpu: 150m
+            memory: 256Mi
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: gwr-authentication-service
+  namespace: gwr-api
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: gwr-authentication-service
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
