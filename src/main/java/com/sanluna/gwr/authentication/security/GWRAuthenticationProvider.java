@@ -38,7 +38,12 @@ public class GWRAuthenticationProvider implements AuthenticationProvider {
     }
 
     private String removeTenant(String name) {
-        return name.split(":-:")[1];
+        try {
+            return name.split(":-:")[1];
+        } catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("array out of bounds");
+            return "anon";
+        }
     }
 
     private String getTenant(String name) {
