@@ -6,26 +6,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Entity
-public class User extends BaseEntity<User> implements UserDetails {
+public class User extends BaseDTO<User> implements UserDetails {
 
-    @Column(name = "username")
     private String username;
-    @Column(name = "password")
     private String password;
-    @Column(name = "tenant")
-    private String tenant;
-    @Column(name = "roles")
     private String roles;
-
-    public <T1 extends BaseDTO<T1>> T1 convertToDTO() {
-        return null;
-    }
 
     public String getUsername() {
         return username;
@@ -54,21 +42,12 @@ public class User extends BaseEntity<User> implements UserDetails {
         return this;
     }
 
-    public String getTenant() {
-        return tenant;
-    }
-
-    public User setTenant(String tenant) {
-        this.tenant = tenant;
-        return this;
-    }
-
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-        if(this.roles == null){
+        if (this.roles == null) {
             return null;
         }
-        for (String x : this.roles.split(",")){
+        for (String x : this.roles.split(",")) {
             grantedAuthorities.add(new SimpleGrantedAuthority(x));
         }
         return grantedAuthorities;
@@ -88,5 +67,10 @@ public class User extends BaseEntity<User> implements UserDetails {
 
     public boolean isEnabled() {
         return isActive();
+    }
+
+    @Override
+    public <T1 extends BaseEntity<T1>> T1 convertToEntity() {
+        return null;
     }
 }

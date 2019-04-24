@@ -43,3 +43,12 @@ GWR:
       wEXJKhlLy4W8VwvrnF596w3S94A2TTI+gF4xEg5GjI4hsUQHUmkf0tAeQyYnesNr
       TwIDAQAB
       -----END PUBLIC KEY-----
+security.oauth2.tenantclient.access-token-uri: http://localhost:18000/authentication/oauth/token
+security.oauth2.tenantclient.tenantclient-id: client
+security.oauth2.tenantclient.tenantclient-secret: secret
+gwr.multitenancy: false
+
+---
+spring:
+  profiles: cloud
+security.oauth2.tenantclient.access-token-uri: http://gwr-authentication-service/authentication/oauth/token

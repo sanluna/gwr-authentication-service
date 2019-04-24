@@ -2,7 +2,9 @@ package com.sanluna.gwr.authentication.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +14,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import sanluna.gwr.security.principal.GWRTokenConverter;
 
 @Configuration
 @EnableAuthorizationServer
@@ -21,13 +24,7 @@ public class GWRAuthServerConfig extends AuthorizationServerConfigurerAdapter {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserDetailsService userService;
-
-    @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtAccessTokenConverter accessTokenConverter;
 
     @Value("${GWR.security.prv}")
     private String prvKey;
@@ -43,7 +40,7 @@ public class GWRAuthServerConfig extends AuthorizationServerConfigurerAdapter {
                 .withClient("client")
                 .secret(passwordEncoder.encode("secret"))
                 .scopes("read")
-                .authorizedGrantTypes("implicit", "refresh_token", "password", "authorization_code")
+                .authorizedGrantTypes("authorization_code", "client_credentials")
                 .refreshTokenValiditySeconds(3600)
                 .accessTokenValiditySeconds(600)
                 .autoApprove(true);
@@ -52,14 +49,19 @@ public class GWRAuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        accessTokenConverter.setSigningKey(prvKey);
-        accessTokenConverter.setVerifierKey(pubKey);
         endpoints
                 .authenticationManager(authenticationManager)
-                .userDetailsService(userService)
-                .tokenEnhancer(accessTokenConverter);
+                .tokenEnhancer(accessTokenConverter());
     }
 
+    @Bean
+    @Primary
+    public JwtAccessTokenConverter accessTokenConverter() {
+        GWRTokenConverter converter = new GWRTokenConverter();
+        converter.setSigningKey(prvKey);
+        converter.setVerifierKey(pubKey);
+        return converter;
+    }
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {

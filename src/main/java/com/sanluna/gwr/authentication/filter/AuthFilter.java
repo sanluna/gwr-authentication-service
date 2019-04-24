@@ -1,6 +1,7 @@
 package com.sanluna.gwr.authentication.filter;
 
 import com.sanluna.gwr.authentication.security.GWRAuthenticationProvider;
+import com.sanluna.multitenancy.TenantContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -29,13 +30,15 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
 
         String username = obtainUsername(request);
         String password = obtainPassword(request);
-        String tenant = request.getServerName();
-        System.out.println(tenant);
+        String tenant = request.getHeader(TenantContext.TENANT_HEADER);
+        if (tenant == null) {
+            tenant = request.getServerName();
+        }
 
+        TenantContext.setCurrentTenant(tenant);
         String usernameWithTenant = tenant + ":-:" + username;
-        System.out.println(usernameWithTenant);
 
-        return new UsernamePasswordAuthenticationToken(usernameWithTenant,password);
+        return new UsernamePasswordAuthenticationToken(usernameWithTenant, password);
 
     }
 }

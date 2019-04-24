@@ -24,13 +24,23 @@
     <dependencies>
         <dependency>
             <groupId>com.sanluna.gwr</groupId>
-            <artifactId>gwr-security</artifactId>
-            <version>LATEST</version>
+            <artifactId>gwr-commons</artifactId>
+            <version>1.0.0.3</version>
         </dependency>
         <dependency>
             <groupId>com.sanluna.gwr</groupId>
-            <artifactId>gwr-commons</artifactId>
-            <version>LATEST</version>
+            <artifactId>gwr-security</artifactId>
+            <version>1.0.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sanluna.gwr</groupId>
+            <artifactId>gwr-member-client</artifactId>
+            <version>1.0.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.2.12.Final</version>
         </dependency>
     </dependencies>
     <build>

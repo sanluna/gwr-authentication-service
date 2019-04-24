@@ -1,7 +1,9 @@
 package com.sanluna.gwr.authentication.security;
 
 import com.sanluna.gwr.authentication.model.User;
-import com.sanluna.gwr.authentication.repository.UserRepository;
+import com.sanluna.gwr.memberclient.MemberClient;
+import com.sanluna.gwr.memberclient.model.MemberDTO;
+import com.sanluna.multitenancy.TenantContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,12 +14,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import sanluna.gwr.security.principal.GWRPrincipal;
 
-import java.util.Collections;
-
 public class GWRAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
-    private UserRepository repository;
+    private MemberClient client;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -26,12 +26,17 @@ public class GWRAuthenticationProvider implements AuthenticationProvider {
         String username = removeTenant(authentication.getName());
         String tenant = getTenant(authentication.getName());
         String password = authentication.getCredentials().toString();
-        User user = repository.findByUsername(username);
-        if (user == null) {
+        MemberDTO member = client.getMember(username);
+        if (member == null) {
             throw new UsernameNotFoundException("user with username: " + username + " was not found!");
         }
+        User user = new User()
+                .setRoles(member.getRoles())
+                .setPassword(member.getPassword())
+                .setUsername(member.getUsername());
+        user.setId(member.getId());
         if (passwordEncoder.matches(password, user.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(principalBuilder(user), password, Collections.emptyList());
+            return new UsernamePasswordAuthenticationToken(principalBuilder(user), password, user.getAuthorities());
         } else {
             throw new BadCredentialsException("Authentication fail!");
         }
@@ -57,7 +62,7 @@ public class GWRAuthenticationProvider implements AuthenticationProvider {
 
     private Object principalBuilder(User user) {
 
-        return new GWRPrincipal(user.getId(), user.getUsername(), user.getRoles(), user.getTenant());
+        return new GWRPrincipal(user.getId(), user.getUsername(), user.getRoles(), TenantContext.getCurrentTenant());
 
     }
 

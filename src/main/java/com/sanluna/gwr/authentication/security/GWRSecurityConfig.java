@@ -18,12 +18,8 @@ public class GWRSecurityConfig extends WebSecurityConfigurerAdapter {
     private GWRAuthenticationProvider authProvider;
 
     @Autowired
-    private UserDetailsService userService;
-
-    @Autowired
     public void init(AuthenticationManagerBuilder builder) throws Exception{
-        builder.authenticationProvider(authProvider)
-                .userDetailsService(userService);
+        builder.authenticationProvider(authProvider);
     }
 
     @Override

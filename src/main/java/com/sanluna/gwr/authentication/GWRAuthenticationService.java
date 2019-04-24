@@ -2,17 +2,16 @@ package com.sanluna.gwr.authentication;
 
 import com.sanluna.commons.BeansAndConfigurations;
 import com.sanluna.gwr.authentication.security.GWRAuthenticationProvider;
-import com.sanluna.gwr.authentication.service.GWRUserDetailsService;
+import com.sanluna.gwr.memberclient.MemberClientConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import sanluna.gwr.security.SecurityConfiguration;
 
 @SpringBootApplication
-@Import({BeansAndConfigurations.class, SecurityConfiguration.class})
+@Import({BeansAndConfigurations.class, MemberClientConfiguration.class})
 public class GWRAuthenticationService {
 
     public static void main(String[] args) {
@@ -23,12 +22,6 @@ public class GWRAuthenticationService {
     @Primary
     public BCryptPasswordEncoder userPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    @Primary
-    public GWRUserDetailsService userDetailsService() {
-        return new GWRUserDetailsService();
     }
 
     @Bean

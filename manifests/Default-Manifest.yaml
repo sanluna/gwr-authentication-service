@@ -54,7 +54,7 @@ spec:
           initialDelaySeconds: 20
         env:
         - name: JAVA_OPTS
-          value: -Xms128m -Xmx128m
+          value: -Xms128m -Xmx128m -Dspring.profiles.active=cloud
         resources:
           limits:
             memory: 256Mi
