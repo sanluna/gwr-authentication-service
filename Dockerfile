@@ -10,5 +10,5 @@ RUN apk add --no-cache bash
 COPY --from=build home/app/target/gwr-authentication-service-1.0.jar app.jar
 RUN sh -c 'touch /app.jar'
 ENTRYPOINT ["/usr/bin/java"]
-CMD ["-jar", "/app.jar"]
+CMD ["-Dspring.profiles.active=cloud", "-jar", "/app.jar"]
 EXPOSE 18100

@@ -1,0 +1,16 @@
+server:
+  port: 18000
+  use-forward-headers: true
+  servlet:
+    context-path: /authentication
+spring:
+  application:
+    name: gwr-member-service
+  cloud:
+    config:
+      uri: http://localhost:18001
+
+---
+spring:
+  profiles: cloud
+  cloud.config.uri: http://gwr-configuration-service/configservice
