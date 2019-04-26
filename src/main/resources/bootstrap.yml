@@ -5,10 +5,10 @@ server:
     context-path: /authentication
 spring:
   application:
-    name: gwr-member-service
+    name: gwr-authentication-service
   cloud:
     config:
-      uri: http://localhost:18001
+      uri: http://localhost:18001/configservice
 
 ---
 spring:

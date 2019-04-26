@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -40,7 +39,7 @@ public class GWRAuthServerConfig extends AuthorizationServerConfigurerAdapter {
                 .withClient("client")
                 .secret(passwordEncoder.encode("secret"))
                 .scopes("read")
-                .authorizedGrantTypes("authorization_code", "client_credentials")
+                .authorizedGrantTypes("authorization_code", "client_credentials", "password")
                 .refreshTokenValiditySeconds(3600)
                 .accessTokenValiditySeconds(600)
                 .autoApprove(true);

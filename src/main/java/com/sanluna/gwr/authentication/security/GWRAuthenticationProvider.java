@@ -25,6 +25,7 @@ public class GWRAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = removeTenant(authentication.getName());
         String tenant = getTenant(authentication.getName());
+        TenantContext.setCurrentTenant(tenant);
         String password = authentication.getCredentials().toString();
         MemberDTO member = client.getMember(username);
         if (member == null) {
@@ -44,7 +45,7 @@ public class GWRAuthenticationProvider implements AuthenticationProvider {
 
     private String removeTenant(String name) {
         try {
-            return name.split(":-:")[1];
+            return name.substring(name.indexOf(":") + 1);
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("array out of bounds");
             return "anon";
@@ -53,7 +54,7 @@ public class GWRAuthenticationProvider implements AuthenticationProvider {
 
     private String getTenant(String name) {
         try {
-            return name.split(":-:")[0];
+            return name.substring(0, name.indexOf(":"));
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("array out of bounds");
             return "tenant";
