@@ -4,6 +4,8 @@ server:
   servlet:
     context-path: /authentication
 spring:
+  profiles:
+    include: tenancyOff
   application:
     name: gwr-authentication-service
   cloud:

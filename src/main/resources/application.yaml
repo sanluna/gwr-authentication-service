@@ -38,21 +38,3 @@ GWR:
       wEXJKhlLy4W8VwvrnF596w3S94A2TTI+gF4xEg5GjI4hsUQHUmkf0tAeQyYnesNr
       TwIDAQAB
       -----END PUBLIC KEY-----
-
-gwr:
-  multitenancy: false
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/tenant_clients?useSSL=false&serverTimezone=UTC
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: Slazhy
-    password: hej123
-
----
-spring:
-  profiles: cloud
-  datasource:
-    url: jdbc:mysql://gwr-master-database:3306/master_schema?useSSL=false&serverTimezone=UTC
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: testing

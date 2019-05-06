@@ -1,9 +1,10 @@
 package com.sanluna.gwr.authentication.security;
 
+import com.sanluna.clients.memberclient.MemberClient;
+import com.sanluna.clients.memberclient.model.MemberDTO;
 import com.sanluna.gwr.authentication.model.User;
-import com.sanluna.gwr.memberclient.MemberClient;
-import com.sanluna.gwr.memberclient.model.MemberDTO;
-import com.sanluna.multitenancy.TenantContext;
+import com.sanluna.multitenancy.multitenancy.TenantContext;
+import com.sanluna.security.principal.GWRPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import sanluna.gwr.security.principal.GWRPrincipal;
 
 public class GWRAuthenticationProvider implements AuthenticationProvider {
 
