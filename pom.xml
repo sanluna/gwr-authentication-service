@@ -25,7 +25,7 @@
         <dependency>
             <groupId>com.sanluna.gwr</groupId>
             <artifactId>gwr-commons</artifactId>
-            <version>1.0.0.4</version>
+            <version>1.0.0.5</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
